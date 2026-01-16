@@ -1,51 +1,66 @@
-# DSN Skills
+# DSN Skills Marketplace
 
-Claude Code plugin providing managed services skills for Proxmox infrastructure operations.
+Claude Code plugin marketplace for DSN managed services infrastructure operations.
 
 ## Overview
 
-This plugin provides specialized skills for DSN managed service operations including:
+This marketplace provides independently installable plugins for Proxmox infrastructure operations:
 
-- **Backup and Recovery**: PBS backup, restore, and disaster recovery procedures
-- **Proxmox Operations**: VM/CT management, cluster operations (coming soon)
+| Plugin | Description | Triggers |
+|--------|-------------|----------|
+| [backup-recovery](plugins/backup-recovery) | PBS backup, restore, disaster recovery | "backup a VM", "restore container", "list backups" |
+| [proxmox-operations](plugins/proxmox-operations) | General PVE cluster operations | "manage VMs", "cluster status", "migrate" |
+| [dns-dhcp-testing](plugins/dns-dhcp-testing) | DNS/DHCP load testing with real examples | "load test DHCP", "run dnsperf" |
 
 ## Installation
 
-### Via Claude Code CLI
+### Install Specific Plugin
 
 ```bash
-claude-code plugin install github:MrBloodrune/DSN-Skills
+# Clone marketplace
+git clone git@github.com:MrBloodrune/DSN-Skills.git
+
+# Install specific plugin (symlink to Claude Code plugins)
+ln -s ~/DSN-Skills/plugins/backup-recovery ~/.claude/plugins/backup-recovery
+
+# Or copy
+cp -r ~/DSN-Skills/plugins/backup-recovery ~/.claude/plugins/
 ```
 
-### Manual Installation
+### Install All Plugins
 
-1. Clone the repository:
-   ```bash
-   git clone git@github.com:MrBloodrune/DSN-Skills.git ~/.claude/plugins/dsn-skills
-   ```
+```bash
+# Install all plugins
+for plugin in ~/DSN-Skills/plugins/*/; do
+  ln -s "$plugin" ~/.claude/plugins/$(basename "$plugin")
+done
+```
 
-2. Enable in Claude Code settings
+## Marketplace Structure
 
-## Skills
-
-### backup-recovery
-
-Comprehensive Proxmox Backup Server operations for VM/CT backup and disaster recovery.
-
-**Triggers:**
-- "backup a VM"
-- "restore a container"
-- "check backup status"
-- "run host backup"
-- "list backups"
-- "recover from PBS"
-
-**Features:**
-- Real-world command examples with actual output
-- Multi-cluster configuration (LTRKAR02-CL01, FUSE-CL01)
-- Host configuration backup/restore
-- Scheduled backup job management
-- Troubleshooting procedures
+```
+DSN-Skills/
+├── marketplace.json              # Plugin registry/catalog
+├── plugins/
+│   ├── backup-recovery/          # PBS backup/restore operations
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   └── skills/
+│   │       └── backup-recovery/
+│   │           ├── SKILL.md
+│   │           ├── references/
+│   │           ├── examples/
+│   │           └── scripts/
+│   ├── proxmox-operations/       # General PVE operations
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   └── skills/
+│   └── dns-dhcp-testing/         # Load testing
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       └── skills/
+└── README.md
+```
 
 ## Supported Infrastructure
 
@@ -64,57 +79,68 @@ Comprehensive Proxmox Backup Server operations for VM/CT backup and disaster rec
 | LTRKAR02-CL01 | DSN | DSN core services |
 | FUSE-CL01 | Fuse | Managed customer |
 
-## Usage Examples
+## Plugin Details
 
-### Quick Backup
+### backup-recovery
+
+Comprehensive PBS operations with real-world examples captured from production:
+
+- Manual VM/CT backup procedures
+- Restore operations (new VMID, force overwrite)
+- Host configuration backup/restore
+- Scheduled backup job management
+- Troubleshooting guides
+
+**Real output captured:**
+```
+INFO: virtio0: dirty-bitmap status: OK (628.0 MiB of 60.0 GiB dirty)
+INFO: backup was done incrementally, reused 59.39 GiB (98%)
+INFO: transferred 628.00 MiB in 4 seconds (157.0 MiB/s)
+```
+
+### proxmox-operations
+
+Quick reference for common Proxmox VE operations:
+
+- Cluster health checks
+- VM/CT lifecycle management
+- Migration procedures
+- Resource monitoring
+- Ceph status (if applicable)
+
+### dns-dhcp-testing
+
+Load testing procedures with actual results from FUSE-CL01:
+
+- dnsperf for DNS (achieved 805K QPS combined)
+- perfdhcp for DHCP (found ~200/sec safe limit)
+- Pre-built test container backup available
+- LXC-specific workarounds documented
+
+## Usage Examples
 
 ```
 User: Backup VM 1001 on LTRKAR02
-Claude: [Uses backup-recovery skill to provide vzdump command with correct storage and notes template]
-```
+Claude: [Uses backup-recovery skill with correct storage ID and notes template]
 
-### Restore Procedure
-
-```
 User: How do I restore container 101 on FUSE?
-Claude: [Uses backup-recovery skill to provide pct restore procedure with correct PBS storage]
+Claude: [Provides pct restore command with pbs-dsn storage]
+
+User: Load test the DHCP server
+Claude: [Uses dns-dhcp-testing skill with perfdhcp procedures]
 ```
 
-### Check Backup Status
-
-```
-User: List recent backups for VM 1001
-Claude: [Uses backup-recovery skill to provide pvesm list command]
-```
-
-## Development
-
-### Structure
-
-```
-DSN-Skills/
-├── .claude-plugin/
-│   └── plugin.json           # Plugin manifest
-├── skills/
-│   └── backup-recovery/
-│       ├── SKILL.md          # Main skill definition
-│       ├── references/       # Configuration references
-│       ├── examples/         # Command examples
-│       └── scripts/          # Utility scripts
-└── README.md
-```
-
-### Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Add/update skills following the existing structure
-4. Test with Claude Code
+2. Create a new plugin in `plugins/<plugin-name>/`
+3. Follow the structure pattern from existing plugins
+4. Update `marketplace.json` with new plugin entry
 5. Submit a pull request
 
 ## License
 
-MIT License - See LICENSE file for details.
+MIT License
 
 ## Author
 

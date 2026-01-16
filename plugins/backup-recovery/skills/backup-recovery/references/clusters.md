@@ -37,11 +37,6 @@
 | LTRKAR02-PV03 | 10.101.1.13 |
 | LTRKAR02-PV04 | 10.101.1.14 |
 
-### Excluded VMs
-
-- 201: Standby VM
-- 202: Standby VM
-
 ## FUSE-CL01 (Managed Customer)
 
 | Property | Value |
@@ -62,23 +57,8 @@
 | pv03 | 10.205.0.13 |
 | pv04 | 10.205.0.14 |
 
-### Notes Template
-
-All backups must include cluster identifier:
-```
-{{guestname}} - FUSE-CL01
-```
-
 ## Retention Policy (All Clusters)
 
 | keep-last | keep-daily | keep-weekly | keep-monthly | keep-yearly |
 |-----------|------------|-------------|--------------|-------------|
 | 3 | 7 | 4 | 6 | 1 |
-
-## PBS Maintenance Schedule
-
-| Job | Time | Purpose |
-|-----|------|---------|
-| Prune | 01:00 | Remove old backups per retention |
-| GC | 02:00 | Reclaim storage space |
-| Verify | 21:00 | Integrity check |

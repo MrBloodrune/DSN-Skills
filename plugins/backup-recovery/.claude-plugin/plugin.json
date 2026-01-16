@@ -1,0 +1,12 @@
+{
+  "name": "backup-recovery",
+  "version": "1.0.0",
+  "description": "Proxmox Backup Server operations for VM/CT backup, restore, and disaster recovery",
+  "author": {
+    "name": "DSN Network",
+    "email": "admin@dsn.network"
+  },
+  "repository": "https://github.com/MrBloodrune/DSN-Skills",
+  "license": "MIT",
+  "keywords": ["proxmox", "pbs", "backup", "restore", "disaster-recovery"]
+}

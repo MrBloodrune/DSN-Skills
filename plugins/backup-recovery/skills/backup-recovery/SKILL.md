@@ -134,13 +134,6 @@ pvesm list PBS-DSN --content backup | grep "vm/1001"
 pvesm list pbs-dsn --content backup | grep "ct/101"
 ```
 
-**Example output:**
-```
-Volid                                      Format  Type    Size VMID
-PBS-DSN:backup/vm/1001/2026-01-16T08:00:17Z pbs-vm backup 60G  1001
-PBS-DSN:backup/vm/1001/2026-01-16T16:26:33Z pbs-vm backup 60G  1001
-```
-
 **Via proxmox-backup-client (detailed):**
 ```bash
 # Set credentials
@@ -154,19 +147,6 @@ proxmox-backup-client snapshot list \
   --ns DSN
 ```
 
-**Example output:**
-```
-┌──────────────────────────────┬────────┬──────────────────────────────────────────────────────────┐
-│ snapshot                     │   size │ files                                                    │
-╞══════════════════════════════╪════════╪══════════════════════════════════════════════════════════╡
-│ vm/1001/2026-01-15T08:00:02Z │ 60 GiB │ drive-virtio0.img index.json qemu-server.conf            │
-├──────────────────────────────┼────────┼──────────────────────────────────────────────────────────┤
-│ vm/1001/2026-01-16T08:00:17Z │ 60 GiB │ drive-virtio0.img index.json qemu-server.conf            │
-├──────────────────────────────┼────────┼──────────────────────────────────────────────────────────┤
-│ vm/1001/2026-01-16T16:26:33Z │ 60 GiB │ client.log drive-virtio0.img index.json qemu-server.conf │
-└──────────────────────────────┴────────┴──────────────────────────────────────────────────────────┘
-```
-
 ### 4. Restore Operations
 
 **Restore VM to new VMID:**
@@ -176,25 +156,15 @@ qmrestore PBS-DSN:backup/vm/1001/2026-01-16T08:00:17Z 9001 --storage local-lvm
 
 **Restore VM to original (destructive):**
 ```bash
-# Stop VM first
 qm stop 1001
-
-# Restore with force flag
 qmrestore PBS-DSN:backup/vm/1001/2026-01-16T08:00:17Z 1001 --force
-
-# Start VM
 qm start 1001
 ```
 
 **Restore container:**
 ```bash
-# Stop container first
 pct stop 101
-
-# Restore
 pct restore 101 pbs-dsn:backup/ct/101/2026-01-16T02:00:02Z --storage local-lvm --force
-
-# Start container
 pct start 101
 ```
 
@@ -212,47 +182,9 @@ Host configs (/etc, /root) backed up via cron.daily script.
 journalctl -t pbs-host-backup --since today
 ```
 
-**Script reference (LTRKAR02-CL01):**
-```bash
-#!/bin/bash
-export PBS_REPOSITORY="dsn-backup@pam@10.101.1.250:HDD-BACKUP"
-export PBS_PASSWORD="<password>"
-export PBS_FINGERPRINT="1d:f6:06:b2:b7:8b:6e:74:1c:c5:17:56:89:b7:d2:dd:9e:c2:e8:33:8f:03:01:57:63:19:71:f2:0f:02:fe:66"
-
-proxmox-backup-client backup \
-  etc.pxar:/etc \
-  root.pxar:/root \
-  --ns DSN \
-  --backup-id "$(hostname)" \
-  --crypt-mode none
-```
-
-**List host backups:**
-```bash
-export PBS_PASSWORD="<password>"
-export PBS_FINGERPRINT="1d:f6:..."
-
-proxmox-backup-client snapshot list \
-  --group host/LTRKAR02-PV01 \
-  --repository dsn-backup@pam@10.101.1.250:HDD-BACKUP \
-  --ns DSN
-```
-
-**Example output:**
-```
-┌─────────────────────────────────────────┬─────────────┬─────────────────────────────────────────────┐
-│ snapshot                                │        size │ files                                       │
-╞═════════════════════════════════════════╪═════════════╪═════════════════════════════════════════════╡
-│ host/LTRKAR02-PV01/2025-12-31T23:25:56Z │  11.728 MiB │ catalog.pcat1 etc.pxar index.json root.pxar │
-├─────────────────────────────────────────┼─────────────┼─────────────────────────────────────────────┤
-│ host/LTRKAR02-PV01/2026-01-08T18:04:52Z │ 988.555 MiB │ catalog.pcat1 etc.pxar index.json root.pxar │
-└─────────────────────────────────────────┴─────────────┴─────────────────────────────────────────────┘
-```
-
 ### 6. Restore Host Files
 
 ```bash
-# Set credentials
 export PBS_REPOSITORY="dsn-backup@pam@10.101.1.250:HDD-BACKUP"
 export PBS_PASSWORD="<password>"
 export PBS_FINGERPRINT="1d:f6:..."
@@ -268,25 +200,6 @@ cp /tmp/restore/network/interfaces /etc/network/interfaces
 ```
 
 ## Scheduled Backup Jobs
-
-### LTRKAR02-CL01 Job Configuration
-
-**File:** `/etc/pve/jobs.cfg`
-
-```
-vzdump: daily-vm-backup
-	schedule 02:00
-	all 1
-	compress zstd
-	enabled 1
-	exclude 201,202
-	mode snapshot
-	notes-template {{guestname}} - LTRKAR02-CL01
-	notification-mode auto
-	prune-backups keep-daily=7,keep-last=3,keep-monthly=6,keep-weekly=4,keep-yearly=1
-	repeat-missed 1
-	storage PBS-DSN
-```
 
 ### Create New Backup Job (CLI)
 
@@ -308,68 +221,26 @@ pvesh create /cluster/backup \
 |-----------|------------|-------------|--------------|-------------|
 | 3 | 7 | 4 | 6 | 1 |
 
-Pruning handled by PBS-side jobs. Do NOT manually delete from PVE.
-
 ## Troubleshooting
 
 ### Backup Fails to Connect
 
 ```bash
-# Test connectivity
 curl -sk https://10.101.1.250:8007/api2/json/version
-
-# TCP connectivity test
 timeout 5 bash -c 'echo > /dev/tcp/10.101.1.250/8007' && echo "OK"
-
-# Check PBS service
-systemctl status proxmox-backup-proxy
-```
-
-### Backup Slow
-
-**Causes:**
-- First backup (full transfer required)
-- Network congestion
-- PBS hardware limit (~100 MB/s sustained)
-
-**Solutions:**
-```bash
-# Throttle large backups
-vzdump <vmid> --storage PBS-DSN --bwlimit 102400
-
-# Schedule during off-hours
-# Check current jobs
-cat /etc/pve/jobs.cfg
 ```
 
 ### Dirty Bitmap Missing
 
-If backup shows full transfer instead of incremental:
-
-```bash
-# Check bitmap status in backup output
-# Look for: "dirty-bitmap status: OK"
-
-# If missing, may need full backup first
-# The next backup will be incremental
-```
+If backup shows full transfer instead of incremental, the next backup will restore incremental mode.
 
 ### fs-freeze Warning
 
-```
-ERROR: unable to freeze guest fs - child process has failed to execute fsfreeze hook
-```
-
-**Cause:** Guest agent can't freeze filesystem (non-fatal)
-**Impact:** Minor - backup still completes via live mode
-**Fix:** Install/configure qemu-guest-agent in VM
+Non-fatal - backup completes via live mode. Install qemu-guest-agent for cleaner snapshots.
 
 ## Verification Checklist
 
-After any backup operation:
-
 - [ ] Verify backup in PBS storage: `pvesm list PBS-DSN | grep <vmid>`
-- [ ] Check backup size is reasonable (not 0, not unexpectedly large)
+- [ ] Check backup size is reasonable
 - [ ] Verify notes contain cluster identifier
-- [ ] Check task status: `pvesh get /nodes/<node>/tasks --limit 5 --typefilter vzdump`
 - [ ] For critical VMs: Periodically test restore to staging

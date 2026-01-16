@@ -1,0 +1,12 @@
+{
+  "name": "dns-dhcp-testing",
+  "version": "1.0.0",
+  "description": "Load testing for DNS (dnsperf) and DHCP (perfdhcp) services",
+  "author": {
+    "name": "DSN Network",
+    "email": "admin@dsn.network"
+  },
+  "repository": "https://github.com/MrBloodrune/DSN-Skills",
+  "license": "MIT",
+  "keywords": ["dns", "dhcp", "load-testing", "perfdhcp", "dnsperf", "kea"]
+}

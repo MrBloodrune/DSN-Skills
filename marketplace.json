@@ -1,0 +1,39 @@
+{
+  "name": "DSN Skills Marketplace",
+  "description": "Claude Code plugins for DSN managed services infrastructure operations",
+  "version": "1.0.0",
+  "author": {
+    "name": "DSN Network",
+    "email": "admin@dsn.network"
+  },
+  "repository": "https://github.com/MrBloodrune/DSN-Skills",
+  "plugins": [
+    {
+      "name": "backup-recovery",
+      "version": "1.0.0",
+      "description": "Proxmox Backup Server operations for VM/CT backup, restore, and disaster recovery",
+      "path": "plugins/backup-recovery",
+      "category": "infrastructure",
+      "tags": ["proxmox", "pbs", "backup", "restore", "disaster-recovery"],
+      "triggers": ["backup a VM", "restore a container", "list backups", "host backup", "recover from PBS"]
+    },
+    {
+      "name": "proxmox-operations",
+      "version": "1.0.0",
+      "description": "General Proxmox VE cluster operations and administration",
+      "path": "plugins/proxmox-operations",
+      "category": "infrastructure",
+      "tags": ["proxmox", "pve", "cluster", "vm", "container"],
+      "triggers": ["manage VMs", "cluster status", "migrate containers", "node resources"]
+    },
+    {
+      "name": "dns-dhcp-testing",
+      "version": "1.0.0",
+      "description": "Load testing for DNS (dnsperf) and DHCP (perfdhcp) services",
+      "path": "plugins/dns-dhcp-testing",
+      "category": "testing",
+      "tags": ["dns", "dhcp", "load-testing", "perfdhcp", "dnsperf", "kea"],
+      "triggers": ["load test DHCP", "stress test Kea", "test DNS capacity", "run dnsperf"]
+    }
+  ]
+}

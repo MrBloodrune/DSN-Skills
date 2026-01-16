@@ -1,0 +1,12 @@
+{
+  "name": "proxmox-operations",
+  "version": "1.0.0",
+  "description": "General Proxmox VE cluster operations and administration",
+  "author": {
+    "name": "DSN Network",
+    "email": "admin@dsn.network"
+  },
+  "repository": "https://github.com/MrBloodrune/DSN-Skills",
+  "license": "MIT",
+  "keywords": ["proxmox", "pve", "cluster", "vm", "container"]
+}
