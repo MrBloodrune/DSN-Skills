@@ -41,7 +41,8 @@ done
 
 ```
 DSN-Skills/
-├── marketplace.json              # Plugin registry/catalog
+├── .claude-plugin/
+│   └── marketplace.json          # Plugin registry/catalog
 ├── plugins/
 │   ├── backup-recovery/          # PBS backup/restore operations
 │   │   ├── .claude-plugin/
