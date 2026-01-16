@@ -34,6 +34,15 @@
       "category": "testing",
       "tags": ["dns", "dhcp", "load-testing", "perfdhcp", "dnsperf", "kea"],
       "triggers": ["load test DHCP", "stress test Kea", "test DNS capacity", "run dnsperf"]
+    },
+    {
+      "name": "fortigate-admin",
+      "version": "1.0.0",
+      "description": "FortiGate firewall administration - policy management, VPN operations, and network diagnostics",
+      "path": "plugins/fortigate-admin",
+      "category": "network",
+      "tags": ["fortigate", "fortios", "firewall", "vpn", "ipsec", "network", "security"],
+      "triggers": ["check firewall rules", "add firewall policy", "configure FortiGate", "check VPN tunnel", "add address object", "troubleshoot connectivity", "debug traffic flow"]
     }
   ]
 }

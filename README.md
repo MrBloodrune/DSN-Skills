@@ -4,13 +4,14 @@ Claude Code plugin marketplace for DSN managed services infrastructure operation
 
 ## Overview
 
-This marketplace provides independently installable plugins for Proxmox infrastructure operations:
+This marketplace provides independently installable plugins for DSN managed services operations:
 
 | Plugin | Description | Triggers |
 |--------|-------------|----------|
 | [backup-recovery](plugins/backup-recovery) | PBS backup, restore, disaster recovery | "backup a VM", "restore container", "list backups" |
 | [proxmox-operations](plugins/proxmox-operations) | General PVE cluster operations | "manage VMs", "cluster status", "migrate" |
 | [dns-dhcp-testing](plugins/dns-dhcp-testing) | DNS/DHCP load testing with real examples | "load test DHCP", "run dnsperf" |
+| [fortigate-admin](plugins/fortigate-admin) | FortiGate firewall administration | "check firewall", "add policy", "VPN tunnel" |
 
 ## Installation
 
@@ -117,6 +118,23 @@ Load testing procedures with actual results from FUSE-CL01:
 - Pre-built test container backup available
 - LXC-specific workarounds documented
 
+### fortigate-admin
+
+Comprehensive FortiGate firewall administration:
+
+- Policy management (create, modify, append)
+- Address objects and groups
+- VPN/IPsec tunnel operations
+- Routing and diagnostics
+- Scripted SSH command patterns
+- Environment-specific configs (LTRKAR02-DF04, HMBGAR01-DF01/DF02)
+
+**Includes:**
+- Complete CLI command reference
+- VPN troubleshooting procedures
+- Debug traffic flow examples
+- Session debugging workflows
+
 ## Usage Examples
 
 ```
@@ -128,6 +146,12 @@ Claude: [Provides pct restore command with pbs-dsn storage]
 
 User: Load test the DHCP server
 Claude: [Uses dns-dhcp-testing skill with perfdhcp procedures]
+
+User: Check the VPN tunnel to DSN
+Claude: [Uses fortigate-admin skill with tunnel diagnostics]
+
+User: Add address object for new server
+Claude: [Uses fortigate-admin skill with proper scripted SSH pattern]
 ```
 
 ## Contributing

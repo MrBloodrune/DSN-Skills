@@ -1,0 +1,12 @@
+{
+  "name": "fortigate-admin",
+  "version": "1.0.0",
+  "description": "FortiGate firewall administration - policy management, VPN operations, and network diagnostics",
+  "author": {
+    "name": "DSN Network",
+    "email": "admin@dsn.network"
+  },
+  "repository": "https://github.com/MrBloodrune/DSN-Skills",
+  "license": "MIT",
+  "keywords": ["fortigate", "fortios", "firewall", "vpn", "ipsec", "network"]
+}
