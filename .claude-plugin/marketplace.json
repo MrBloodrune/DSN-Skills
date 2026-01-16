@@ -1,10 +1,11 @@
 {
-  "name": "DSN Skills Marketplace",
+  "name": "dsn-skills",
   "description": "Claude Code plugins for DSN managed services infrastructure operations",
   "version": "1.0.0",
-  "author": {
+  "owner": {
     "name": "DSN Network",
-    "email": "admin@dsn.network"
+    "email": "admin@dsn.network",
+    "url": "https://github.com/MrBloodrune"
   },
   "repository": "https://github.com/MrBloodrune/DSN-Skills",
   "plugins": [
@@ -12,37 +13,33 @@
       "name": "backup-recovery",
       "version": "1.0.0",
       "description": "Proxmox Backup Server operations for VM/CT backup, restore, and disaster recovery",
-      "path": "plugins/backup-recovery",
+      "source": "./plugins/backup-recovery",
       "category": "infrastructure",
-      "tags": ["proxmox", "pbs", "backup", "restore", "disaster-recovery"],
-      "triggers": ["backup a VM", "restore a container", "list backups", "host backup", "recover from PBS"]
+      "tags": ["proxmox", "pbs", "backup", "restore", "disaster-recovery"]
     },
     {
       "name": "proxmox-operations",
       "version": "1.0.0",
       "description": "General Proxmox VE cluster operations and administration",
-      "path": "plugins/proxmox-operations",
+      "source": "./plugins/proxmox-operations",
       "category": "infrastructure",
-      "tags": ["proxmox", "pve", "cluster", "vm", "container"],
-      "triggers": ["manage VMs", "cluster status", "migrate containers", "node resources"]
+      "tags": ["proxmox", "pve", "cluster", "vm", "container"]
     },
     {
       "name": "dns-dhcp-testing",
       "version": "1.0.0",
       "description": "Load testing for DNS (dnsperf) and DHCP (perfdhcp) services",
-      "path": "plugins/dns-dhcp-testing",
+      "source": "./plugins/dns-dhcp-testing",
       "category": "testing",
-      "tags": ["dns", "dhcp", "load-testing", "perfdhcp", "dnsperf", "kea"],
-      "triggers": ["load test DHCP", "stress test Kea", "test DNS capacity", "run dnsperf"]
+      "tags": ["dns", "dhcp", "load-testing", "perfdhcp", "dnsperf", "kea"]
     },
     {
       "name": "fortigate-admin",
       "version": "1.0.0",
       "description": "FortiGate firewall administration - policy management, VPN operations, and network diagnostics",
-      "path": "plugins/fortigate-admin",
+      "source": "./plugins/fortigate-admin",
       "category": "network",
-      "tags": ["fortigate", "fortios", "firewall", "vpn", "ipsec", "network", "security"],
-      "triggers": ["check firewall rules", "add firewall policy", "configure FortiGate", "check VPN tunnel", "add address object", "troubleshoot connectivity", "debug traffic flow"]
+      "tags": ["fortigate", "fortios", "firewall", "vpn", "ipsec", "network", "security"]
     }
   ]
 }
